@@ -1,0 +1,14 @@
+{
+  "name": "dynamonster",
+  "module": "lib/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1025.0"
+  }
+}
