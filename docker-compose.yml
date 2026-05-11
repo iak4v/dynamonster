@@ -1,18 +1,18 @@
 services:
-  dynamodb:
-    image: amazon/dynamodb-local
-    container_name: dynamodb-local
-    ports:
-      - "8000:8000"
-    command: "-jar DynamoDBLocal.jar -inMemory -sharedDb"
-    volumes:
-      - ./.docker/dynamodb_data:/home/dynamodblocal/data
-  dynamodb-admin:
-    image: aaronshaf/dynamodb-admin
-    container_name: dynamodb-admin
-    ports:
-      - "8001:8001"
-    environment:
-      - DYNAMO_ENDPOINT=http://dynamodb:8000
-    depends_on:
-      - dynamodb
+    dynamodb:
+        image: amazon/dynamodb-local
+        container_name: dynamodb-local
+        ports:
+            - "8000:8000"
+        command: "-jar DynamoDBLocal.jar -inMemory -sharedDb"
+        volumes:
+            - ./.docker/dynamodb_data:/home/dynamodblocal/data
+    dynamodb-admin:
+        image: aaronshaf/dynamodb-admin
+        container_name: dynamodb-admin
+        ports:
+            - "8001:8001"
+        environment:
+            - DYNAMO_ENDPOINT=http://dynamodb:8000
+        depends_on:
+            - dynamodb

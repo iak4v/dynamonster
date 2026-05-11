@@ -30,8 +30,9 @@ Dynamonster.set({
 ```
 
 ## Creation and Validation using the Collections
+
 ```ts
-import {Table, Entity, m} from "dynamonster";
+import { Table, Entity, m } from "dynamonster";
 
 export const users = Table({
     entity: Entity({
@@ -41,8 +42,8 @@ export const users = Table({
         isSubscribed: m.boolean().default(false),
         pictureUrl: m.string().optional(),
     }),
-    config: {tableName: 'my-users-db'}
-})
+    config: { tableName: "my-users-db" },
+});
 
 export type User = m.infer<typeof users>;
 // User = {
@@ -66,7 +67,7 @@ const myUser = await users
         email: "admin@example.com",
         name: "Admin",
         age: 29,
-        isSubscribed: true
+        isSubscribed: true,
     })
     .go();
 
@@ -76,10 +77,7 @@ const myUser = await users
 2. Read an item from a collection
 
 ```ts
-const myUser = await users
-    .get({ email: "admin@gmail.com" })
-    .attributes(["email", "name"])
-    .go();
+const myUser = await users.get({ email: "admin@gmail.com" }).attributes(["email", "name"]).go();
 
 // myUser = {
 //     email: string,
@@ -93,13 +91,11 @@ const myUser = await users
 const updatedUser = await users
     .update({ email: "admin@gmail.com" })
     .set({ name: "New Title" })
-    .go()
+    .go();
 ```
 
 4. Delete an item
 
 ```ts
-const deletedUser = await ddb
-    .delete({ email: "admin@example.com" })
-    .go();
+const deletedUser = await ddb.delete({ email: "admin@example.com" }).go();
 ```

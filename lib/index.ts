@@ -1,46 +1,55 @@
-import { Table as DTable, type TableConfig } from "@/table"
-import { Entity as DEntity } from "@/entity";
-import { M, type IValue } from "./monster";
-import Dynamonster from "@/dynamodb";
+import { col, type binary as Tbinary, type map as Tmap } from "./col";
+import { Table } from "./table";
+import { dynamonster } from "./dynamonster";
+import { Entity } from "./entity";
 
-const Entity = <T extends Record<string, M> = any>(e: T) => new DEntity(e);
-const Table = <S extends DEntity>(config: { entity: S, config: TableConfig<S> }) => new DTable(config);
+export const string = (colName?: string) => {
+    const c = new col<string>(colName);
+    c.$typeOfValue = 'S'
+    return c;
+}
 
-export {
-    Entity,
-    Table,
-    Dynamonster
+export const number = (colName?: string) => {
+    const c = new col<number>(colName);
+    c.$typeOfValue = 'N'
+    return c;
+}
+
+export const boolean = (colName?: string) => {
+    const c = new col<boolean>(colName);
+    c.$typeOfValue = 'BOOL'
+    return c;
+}
+
+export const binary = (colName?: string) => {
+    const c = new col<Tbinary>(colName);
+    c.$typeOfValue = 'B'
+    return c;
+}
+
+export const map = <M>(colName?: string) => {
+    const c = new col<Tmap<M>>(colName);
+    c.$typeOfValue = 'M'
+    return c;
 };
 
+export const nul = (colName?: string) => {
+    const c = new col<null>(colName);
+    c.$typeOfValue = 'NULL'
+    return c;
+}
 
-type PickDefined<T> = Pick<T, { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T]>;
-type MakeUndefinedToOptional<T> = Partial<Pick<T, { [P in keyof T]: undefined extends T[P] ? P : never }[keyof T]>>;
+// export const map = <M>(colName: string, type: Record<string, col>) => {
+//     const c = new col<Tmap<M>>(colName);
+//     c.$typeOfValue = 'M'
+//     return c;
+// };
 
+export const table = <T extends Record<string, col>>(name: string, entity: T) =>
+    new Table<T>(name, entity);
 
+export const entity = <T extends Record<string, col>>(schema: T) => new Entity(schema);
 
-type _infer<
-    E extends DEntity,
-    Schema = E extends DEntity<infer R>
-    ? {
-        [P in keyof R]: R[P] extends M<infer T, any, any, infer IsOptional, infer HasDefault>
-        ? true extends IsOptional | HasDefault ? (IValue<T> | undefined) : IValue<T>
-        : never
-    }
-    : never,
-    R = PickDefined<Schema> & MakeUndefinedToOptional<Schema>> = R;
-
-
-type EntityToType<T> = T extends DEntity<infer S> ? { [P in keyof S]: S[P] extends M<infer X, any, any> ? IValue<X> : never } : never;
-type ExtractEntityKeys<T, Keys> = T extends DEntity<infer S>
-    ? { [P in keyof S]: S[P] extends M<"string", infer K, any> ? K extends Keys ? string : undefined : undefined }
-    : never;
-
-export namespace m {
-    export type infer<E extends DEntity> = _infer<E>;
-    export type inferKeys<T extends DEntity, Keys = 'hashKey' | 'rangeKey'> = PickDefined<ExtractEntityKeys<T, Keys>>;
-
-
-    export const string = M.string;
-    export const number = M.number;
-    export const boolean = M.boolean;
+export {
+    dynamonster
 }
