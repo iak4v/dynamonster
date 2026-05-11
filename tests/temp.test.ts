@@ -243,7 +243,7 @@ const rangeKey = 123;
 describe("scan", () => {
     beforeAll(async () => {
         // await db.table(postTable).put({ hashKey, rangeKey, title: 'title title title', indexable: false, likedUsers: new Set(['u1', 'u2']), authors: ['admin1', 'admin2'] });
-        await db.table(postTable).exec(new PutItemCommand({
+        const _ = await db.table(postTable).exec(new PutItemCommand({
             TableName: postTable.name,
             Item: {
                 [postTable.entity.col('hashKey').name]: { S: hashKey },

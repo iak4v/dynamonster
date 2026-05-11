@@ -36,7 +36,8 @@ export class Table<T extends Record<string, col>> {
             // @ts-ignore
             KeySchema: Object.entries(this.entity.$keys).map(([t, a]) => ({ AttributeName: a.name, KeyType: t })),
             AttributeDefinitions: Object.entries(this.entity.$keys).map(([_, a]) => ({ AttributeName: a.name, AttributeType: a.type })),
-            BillingMode: "PAY_PER_REQUEST"
+            BillingMode: "PAY_PER_REQUEST",
+
         })
 
         return ddb.get()!.send(command).then((r) => {
